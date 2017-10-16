@@ -11,5 +11,6 @@
 public interface GenTree {
   public void clear();
   public GTNode root();
-  public void newroot(Object value, GTNode first, GTNode sib);
+  public GTNode newroot(Object value);
+  public void breadthFirstTraversal();
 }

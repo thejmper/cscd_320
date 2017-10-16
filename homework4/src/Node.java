@@ -1,3 +1,7 @@
+
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,51 +14,93 @@
  */
 public class Node implements GTNode {
 
+    //==member fields==//
+    private GTNode parent;
+    private GTNode rightSibling;
+    private Object data;
+    private ArrayList<GTNode> children;
+    
+    //==================================
+    public Node(Object data){
+        this.data = data;
+        this.children = new ArrayList<>();
+    }
+    //==================================
+    
     @Override
     public Object value() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.data;
     }
 
     @Override
     public boolean isLeaf() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.children.isEmpty();
     }
 
     @Override
     public GTNode parent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.parent;
     }
 
+    @Override 
+    public List<GTNode> children(){
+        return this.children;
+    }
+    
     @Override
     public GTNode leftmostChild() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.children.isEmpty())
+            return null;
+        
+        return this.children.get(0);
     }
 
     @Override
     public GTNode rightSibling() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.rightSibling;
     }
 
     @Override
     public void setValue(Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.data = value;
     }
 
     @Override
     public void setParent(GTNode par) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.parent = par;
     }
 
     @Override
+    public void setRightSibling(GTNode sib){
+        this.rightSibling = sib;
+    }
+    
+    @Override
     public void insertFirst(GTNode n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+        if(this.isLeaf()){
+            insertFirst(n);
+            return;
+        }
+        
+        this.children.set(0, n);
+         n.setParent(this);
+         
+         if(this.children.size() > 1)
+             n.setRightSibling(this.children.get(1));
     }
 
     @Override
     public void insertNext(GTNode n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.children.add(n);
+        n.setParent(this);
+        
+        if(this.children.size() > 2){
+            GTNode oldRight = this.children.get(this.children.size() -2);        
+            oldRight.setRightSibling(n);
+        }
     }
-
+    
     @Override
     public void removeFirst() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -63,6 +109,5 @@ public class Node implements GTNode {
     @Override
     public void removeNext() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    }    
 }
